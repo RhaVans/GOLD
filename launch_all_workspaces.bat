@@ -55,7 +55,7 @@ if defined WS1 (
     if exist "!WS1!" (
         set /a PORT=BASE_PORT+0
         echo  [!PORT!]  Launching: !WS1!
-        start "Antigravity - WS1 [Port !PORT!]" cmd /c "cd /d "!WS1!" && antigravity . --remote-debugging-port=!PORT! && pause"
+        start "Antigravity - WS1 [Port !PORT!]" cmd /k "cd /d ^"!WS1!^" && antigravity . --remote-debugging-port=!PORT!"
         set /a LAUNCHED+=1
     ) else (
         echo  [SKIP]  WS1 path not found: !WS1!
@@ -67,7 +67,7 @@ if defined WS2 (
     if exist "!WS2!" (
         set /a PORT=BASE_PORT+1
         echo  [!PORT!]  Launching: !WS2!
-        start "Antigravity - WS2 [Port !PORT!]" cmd /c "cd /d "!WS2!" && antigravity . --remote-debugging-port=!PORT! && pause"
+        start "Antigravity - WS2 [Port !PORT!]" cmd /k "cd /d ^"!WS2!^" && antigravity . --remote-debugging-port=!PORT!"
         set /a LAUNCHED+=1
     ) else (
         echo  [SKIP]  WS2 path not found: !WS2!
@@ -79,7 +79,7 @@ if defined WS3 (
     if exist "!WS3!" (
         set /a PORT=BASE_PORT+2
         echo  [!PORT!]  Launching: !WS3!
-        start "Antigravity - WS3 [Port !PORT!]" cmd /c "cd /d "!WS3!" && antigravity . --remote-debugging-port=!PORT! && pause"
+        start "Antigravity - WS3 [Port !PORT!]" cmd /k "cd /d ^"!WS3!^" && antigravity . --remote-debugging-port=!PORT!"
         set /a LAUNCHED+=1
     ) else (
         echo  [SKIP]  WS3 path not found: !WS3!
@@ -91,7 +91,7 @@ if defined WS4 (
     if exist "!WS4!" (
         set /a PORT=BASE_PORT+3
         echo  [!PORT!]  Launching: !WS4!
-        start "Antigravity - WS4 [Port !PORT!]" cmd /c "cd /d "!WS4!" && antigravity . --remote-debugging-port=!PORT! && pause"
+        start "Antigravity - WS4 [Port !PORT!]" cmd /k "cd /d ^"!WS4!^" && antigravity . --remote-debugging-port=!PORT!"
         set /a LAUNCHED+=1
     ) else (
         echo  [SKIP]  WS4 path not found: !WS4!

@@ -13,14 +13,13 @@ import logging
 # -----------------------------------------------------------------------------
 def check_dependencies():
     """Checks and installs required Python packages."""
-    needed = ["pyngrok", "python-dotenv", "qrcode", "pinggy"]
+    needed = ["python-dotenv", "qrcode", "pinggy"]
     installed = []
     
     # Check what is missing
     for pkg in needed:
         try:
-            if pkg == "pyngrok": from pyngrok import ngrok
-            elif pkg == "python-dotenv": from dotenv import load_dotenv
+            if pkg == "python-dotenv": from dotenv import load_dotenv
             elif pkg == "qrcode": import qrcode
             elif pkg == "pinggy": import pinggy
             installed.append(pkg)
@@ -104,10 +103,8 @@ def main():
     check_dependencies()
     check_node_environment()
     
-    # Suppress pyngrok noise (especially during shutdown)
+    # Suppress pyngrok noise in case someone uses ngrok provider
     logging.getLogger("pyngrok").setLevel(logging.ERROR)
-    
-    from pyngrok import ngrok
 
     from dotenv import load_dotenv
     
@@ -115,7 +112,7 @@ def main():
     load_dotenv()
 
     # Determine Provider
-    provider = args.provider or os.environ.get('TUNNEL_PROVIDER', 'ngrok').lower()
+    provider = args.provider or os.environ.get('TUNNEL_PROVIDER', 'cloudflare').lower()
     
     # Setup App Password
     passcode = os.environ.get('APP_PASSWORD')
@@ -292,16 +289,21 @@ def main():
                         print(f"❌ Failed to start Cloudflare Tunnel: {e}")
                         sys.exit(1)
             else:
-                # Default to Ngrok
+                # Fallback to Ngrok (legacy provider)
+                try:
+                    from pyngrok import ngrok as _ngrok
+                except ImportError:
+                    print("❌ Error: 'pyngrok' not installed. Run: pip install pyngrok")
+                    sys.exit(1)
                 # Check Ngrok Token
                 token = os.environ.get('NGROK_AUTHTOKEN')
                 if token:
-                    ngrok.set_auth_token(token)
+                    _ngrok.set_auth_token(token)
                 else:
                     print("⚠️  Warning: NGROK_AUTHTOKEN not found in .env. Tunnel might expire.")
 
                 print("PLEASE WAIT... Establishing Ngrok Tunnel...")
-                tunnel = ngrok.connect(addr, host_header="rewrite")
+                tunnel = _ngrok.connect(addr, host_header="rewrite")
                 public_url = tunnel.public_url
             
             # Magic URL with password
@@ -387,8 +389,12 @@ def main():
                         pass
                 elif provider == 'cloudflare' and 'cf_process' in locals():
                     cf_process.terminate()
-                elif 'ngrok' in locals():
-                    ngrok.kill()
+                elif provider == 'ngrok':
+                    try:
+                        from pyngrok import ngrok as _ngrok
+                        _ngrok.kill()
+                    except Exception:
+                        pass
         except Exception:
             pass
         

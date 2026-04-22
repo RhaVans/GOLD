@@ -45,7 +45,7 @@ if [ ! -f ".env" ]; then
         echo "[INFO] Creating .env from .env.example..."
         cp .env.example .env
         echo "[SUCCESS] .env created from template!"
-        echo "[ACTION] Please open .env and update it with your configuration (e.g., NGROK_AUTHTOKEN)."
+        echo "[ACTION] Please open .env and configure your TUNNEL_PROVIDER (default: cloudflare)."
         exit 0
     else
         echo "[ERROR] .env.example not found. Cannot create .env template."

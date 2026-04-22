@@ -51,7 +51,7 @@ if exist ".env.example" (
     echo [INFO] Creating .env from .env.example...
     copy .env.example .env >nul
     echo [SUCCESS] .env created from template!
-    echo [ACTION] Please open .env and update it with your configuration (e.g., NGROK_AUTHTOKEN).
+    echo [ACTION] Please open .env and configure your TUNNEL_PROVIDER (default: cloudflare).
     pause
     exit /b
 ) else (

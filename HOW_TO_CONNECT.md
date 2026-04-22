@@ -8,7 +8,7 @@ GOLD is a local server that mirrors your Antigravity IDE sessions to any device.
 
 - Antigravity IDE installed
 - Node.js >= 18
-- Both devices on the same network (for local mode), or ngrok configured (for web mode)
+- Both devices on the same network (for local mode), or `cloudflared` installed (for web mode)
 
 ## Step 1: Start Antigravity in Debug Mode
 
@@ -30,9 +30,9 @@ Open or start a chat in Antigravity before proceeding.
 node server.js
 ```
 
-### Web Mode (remote access via ngrok)
+### Web Mode (remote access via Cloudflare Tunnel)
 ```bash
-node server.js --mode web
+python launcher.py --mode web
 ```
 
 Or use the launcher:
@@ -44,12 +44,12 @@ start_ag_phone_connect_web.bat
 
 Open the URL displayed in the terminal on your phone or any browser:
 - Local: `http://<your-lan-ip>:3000`
-- Web: The ngrok URL displayed in the terminal
+- Web: The Cloudflare Tunnel URL displayed in the terminal (e.g. `https://xxxx.trycloudflare.com`)
 
 ## Authentication
 
 - **Local network**: No password required (auto-bypassed for LAN devices)
-- **Remote/ngrok**: Enter the password set in your `.env` file (`APP_PASSWORD`)
+- **Remote/Cloudflare**: Enter the password set in your `.env` file (`APP_PASSWORD`)
 - **Magic link**: If using web mode, scan the QR code for instant login
 
 ## Troubleshooting
