@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GOLD | Global Operator Link Developer</title>
+    <meta name="description" content="Bloomberg Terminal-style mobile connector for Antigravity IDE workspaces.">
+    <meta name="theme-color" content="#080808">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 1. HEADER BAR                               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <header class="hdr-bar" id="headerBar">
+        <div class="hdr-left">
+            <span class="hdr-title">GOLD</span>
+            <span class="hdr-live" id="liveIndicator">● LIVE</span>
+        </div>
+        <div class="hdr-right">
+            <button class="hdr-btn" id="newChatBtn" title="New Chat">+NEW</button>
+            <button class="hdr-btn" id="historyBtn" title="History">HIST</button>
+            <button class="hdr-btn hdr-btn--stop" id="stopBtn" title="Stop">■ STOP</button>
+            <button class="hdr-btn" id="refreshBtn" title="Sync">↺ SYNC</button>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 2. WORKSPACE ROW                            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="ws-row" id="workspaceBar">
+        <div class="ws-left">
+            <span class="ws-dot" id="statusDot">●</span>
+            <span class="ws-label">WS:</span>
+            <span class="ws-name" id="workspaceName">DISCOVERING...</span>
+            <button class="ws-switch-btn" id="workspaceSwitchBtn" title="Switch Workspace">▾</button>
+            <span class="ws-count-badge" id="workspaceCount">0</span>
+        </div>
+        <div class="ws-right">
+            <span class="ws-stats" id="statsText">NODES: -- · SIZE: --KB</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 3. MODEL / MODE ROW                         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="model-row">
+        <div class="model-selector-group">
+            <span class="model-label">MODE:</span>
+            <button class="model-pill active" id="modeBtn">
+                <span id="modeText">FAST</span> <span class="model-arrow">▾</span>
+            </button>
+        </div>
+        <div class="model-selector-group">
+            <span class="model-label">MODEL:</span>
+            <button class="model-pill" id="modelBtn">
+                <span id="modelText">WAITING...</span> <span class="model-arrow">▾</span>
+            </button>
+        </div>
+        <div class="model-sync-ts">
+            <span id="lastSyncTs">--:--:--</span>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 4. MAIN CHAT / MESSAGE AREA                 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <main class="chat-area" id="chatContainer">
+        <div id="chatContent">
+            <div class="msg-block">
+                <div class="msg-header">
+                    <span class="msg-ts">--:--:--</span>
+                    <span class="msg-role">SYSTEM</span>
+                    <span class="msg-sep">·</span>
+                    <span class="msg-title">AWAITING DATALINK</span>
+                </div>
+                <div class="msg-body loading-state">[SYSTEM] AWAITING DATALINK...</div>
+            </div>
+        </div>
+        <!-- Resume live button -->
+        <button class="resume-btn hidden" id="resumeLiveBtn">▼ RESUME LIVE</button>
+    </main>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 5. SUGGESTION CHIPS                         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="chips-row" id="chipsRow">
+        <div class="chips-scroll">
+            <button class="chip" id="chip-continue" data-action="Continue from where you left off.">
+                <span class="chip-key">F1</span> CONTINUE
+            </button>
+            <button class="chip" id="chip-explain" data-action="Explain this code in detailed and elaborate manner.">
+                <span class="chip-key">F2</span> EXPLAIN
+            </button>
+            <button class="chip" id="chip-fix" data-action="Please fix the bugs in this code...">
+                <span class="chip-key">F3</span> FIX BUGS
+            </button>
+            <button class="chip" id="chip-create" data-action="Please create or update documentation for this code.">
+                <span class="chip-key">F4</span> CREATE
+            </button>
+            <button class="chip" id="chip-review" data-action="Please do a comprehensive code review.">
+                <span class="chip-key">F5</span> REVIEW
+            </button>
+            <button class="chip" id="chip-optimize" data-action="Please optimize this code for performance.">
+                <span class="chip-key">F6</span> OPTIMIZE
+            </button>
+        </div>
+        <div class="chips-fade"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 5b. TOOLS ROW (Media / Mentions / Workflows) -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="tools-row" id="toolsRow">
+        <button class="tool-btn" id="toolMedia" title="Media">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            MEDIA
+        </button>
+        <button class="tool-btn" id="toolMentions" title="Mentions">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0V12a10 10 0 1 0-3.92 7.94"/></svg>
+            MENTIONS
+        </button>
+        <button class="tool-btn" id="toolWorkflows" title="Workflows">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            WORKFLOWS
+        </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- 6. MESSAGE INPUT BAR                        -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="input-bar" id="inputBar">
+        <div class="input-wrap">
+            <span class="input-prompt">GOLD&gt;</span>
+            <textarea
+                id="messageInput"
+                class="input-field"
+                placeholder="_"
+                rows="1"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+            ></textarea>
+        </div>
+        <button class="send-btn" id="sendBtn">SEND ↵</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- MODALS                                      -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-panel" id="modalPanel">
+            <div class="modal-title" id="modalTitle">SELECT OPTION</div>
+            <div id="modalList"></div>
+            <div class="modal-footer">
+                <button id="closeModalBtn">[ESC] CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workspace Drawer Overlay -->
+    <div class="ws-drawer-overlay" id="workspaceDrawerOverlay"></div>
+    <div class="ws-drawer" id="workspaceDrawer">
+        <div class="ws-drawer-header">
+            <span>WORKSPACES</span>
+            <button id="workspaceDrawerClose">[ESC]</button>
+        </div>
+        <div id="workspaceDrawerList"></div>
+    </div>
+
+    <!-- History Layer -->
+    <div class="history-layer" id="historyLayer">
+        <div class="history-header">
+            <span>CHAT HISTORY</span>
+            <button id="backHistoryBtn">[ESC]</button>
+        </div>
+        <div class="history-list" id="historyList">
+            <div class="loading-state">[SYSTEM] LOADING HISTORY...</div>
+        </div>
+    </div>
+
+    <!-- ══ Hidden compatibility stubs ══ -->
+    <div style="display:none;" id="syncStats"></div>
+    <div style="display:none;" id="workspaceActive"></div>
+    <div style="display:none;" id="sslBanner" class="ssl-banner"></div>
+    <div style="display:none;" id="enableHttpsBtn"></div>
+    <div style="display:none;" id="dismissSslBtn"></div>
+    <div style="display:none;" id="supportBtn"></div>
+    <div style="display:none;" id="supportOverlay"></div>
+    <div style="display:none;" id="closeSupportBtn"></div>
+    <div style="display:none;" id="scrollToBottom"></div>
+    <div style="display:none;" id="workspacePort"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
