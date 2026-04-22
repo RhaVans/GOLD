@@ -64,7 +64,10 @@ Complete redesign. Terminal-inspired UI, multi-workspace support, media upload, 
 - Added multer dependency for file upload support
 - Expanded snapshot capture action bar preservation (apply, accept, reject, save, keep, discard)
 - Cookie-based auth with magic link and QR code support
-- ngrok integration for remote access
+- Cloudflare Tunnel as default tunnel provider (free, no account required)
+- Multi-provider tunnel support: Cloudflare (default), Pinggy, ngrok
+- Multi-workspace launcher script (`launch_all_workspaces.bat`) — up to 4 workspaces
+- Portable bridge connector (`bridge_connector.bat`) for cross-workspace launching
 
 ---
 
